@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>edit_app</title>
+    <link rel="stylesheet" href="/static/commons.css">
+    <style>
+        .hide{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<form action="/edit_app-{{app_data.id}}/" method="post">
+    <input type="text" class="hide" name="id" id="aid" value="{{ app_data.id }}" />
+    <input type="text" name="app_name" id="app_name" value="{{ app_data.name }}"/>
+    <select name="host" multiple>
+        {% for h in hosts %}
+            {% if h in app_data.r.all  %}
+                <option value="{{h.hid}}" selected="true">{{h.hostname}}</option>
+            {% else %}
+                <option value="{{h.hid}}">{{h.hostname}}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <input type="submit" value="提交" />
+    <input type="button" value="取消" />
+</form>
+<script src="/static/jquery-1.12.4.js"></script>
+<script>
+
+</script>
+</body>
+</html>

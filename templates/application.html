@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>app</title>
+    <link rel="stylesheet" href="#" />
+    <style>
+        .host{
+            display: inline-block;
+            background-color: blue;
+            margin: 3px;
+            padding: 3px;
+        }
+        .hide{
+            display: none;
+        }
+        .shadow{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: black;
+            opacity: 0.6;
+        }
+        .del_modal{
+            position: fixed;
+            width: 135px;
+            height: 100px;
+            top: 100px;
+            left: 50%;
+            background-color: red;
+            margin-left: -135px;
+        }
+
+        .pagination .page{
+            display: inline-block;
+            padding: 5px;
+            margin: 5px;
+            background-color: yellow;
+        }
+        .pagination .page.active{
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <td>ID</td>
+            <td>APP名</td>
+            <td>安装主机名</td>
+            <td>操作</td>
+        </tr>
+        {% for row in apps %}
+            <tr class="{{ row.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ row.name }}</td>
+                <td>
+                    {% for h in row.r.all %}
+                        <span class="host">{{h.hostname}}</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="/edit_app-{{row.id}}/">编辑</a>
+                    <a class='delApp' href="#">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <div>
+        <select id='ps' onchange="changePageSize(this)">
+            <option value="10">10</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+
+    <div class="pagination">
+        {{ page_str }}
+    </div>
+
+    <div><a href="/add_app/">新增</a></div>
+    <div class="shadow hide"></div>
+    <div class="del_modal hide">
+        <h3>确定删除？？？</h3>
+        <form id="del_form" action="/del_app/" method="post">
+            <input type="text" class="app_id hide" name="app_id" />
+            <input type="submit" value="sure" />
+            <input id="del_cancel" type="button" value="cancel" />
+        </form>
+    </div>
+    <script src="/static/jquery-1.12.4.js"></script>
+    <script src="/static/jquery.cookie.js"> </script>
+    <script>
+
+        $(function(){
+            $.cookie.raw = false;
+            var v = $.cookie('per_page_count');
+            console.log(v);
+            $("#ps").val(v);
+        });
+
+        function changePageSize(ths){
+            var v = $(ths).val();
+            console.log(v);
+            $.cookie('per_page_count', v, {'path': "/application/"});
+            location.reload();
+        };
+
+        $('.delApp').click(function(){
+            $('.shadow, .del_modal').removeClass('hide');
+            var id = $(this).parent().parent().attr('class');
+            console.log(id);
+            $('#del_form input[type="text"]').val(id);
+        });
+
+        $('#del_cancel').click(function(){
+            $('.shadow, .del_modal').addClass('hide');
+        });
+
+
+    </script>
+</body>
+</html>

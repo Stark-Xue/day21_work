@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>edit_host</title>
+</head>
+<body>
+<form action="/edit_host-{{host.hid}}/" method="post">
+    <input type="text" name="hostname" value="{{host.hostname}}" />
+    <input type="text" name="ip" value="{{host.ip}}" />
+    <input type="text" name="port" value="{{host.port}}" />
+    <select name="buss">
+        {% for b in buss %}
+            {% if host.b_id == b.id %}
+                <option value="{{b.id}}" selected="true">{{b.caption}}</option>
+            {% else %}
+                <option value="{{b.id}}">{{b.caption}}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <input type="submit" value="确认" />
+</form>
+</body>
+</html>
